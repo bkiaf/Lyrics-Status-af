@@ -10,13 +10,9 @@ The original concept and core idea is based on [OvalQuilter/lyrics-status](https
 
 This fork (v7) includes several fixes, improvements, and a fully redesigned control panel:
 
-- Redesigned UI panel with smooth animations and multiple themes
-- Live connection status indicator (Disconnected → Not playing → Live)
-- Real-time playback state broadcast from server to panel via WebSocket
+- Redesigned UI panel
+- Real-time playback state
 - Fixed template literal rendering in the console output
-- Fancy console display with AF branding
-- English-only interface
-- Improved `.bat` launchers with UTF-8 support and branded ASCII logo
 
 ---
 
@@ -33,7 +29,6 @@ While you're listening to Spotify, this tool fetches the current song's lyrics a
 | [Node.js](https://nodejs.org/en) | v17 or higher |
 | Windows | 10 / 11 (for `.bat` launchers) |
 | A Spotify account | Free or Premium |
-| A Discord account | Any |
 
 ---
 
