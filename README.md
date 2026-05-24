@@ -169,11 +169,11 @@ In the **Theme** tab, you can choose a built-in theme or create your own custom 
 
 Built-in presets include:
 
-- Dark
 - Purple
 - Ocean
 - Sunset
 - Forest
+- custom
 
 ---
 
