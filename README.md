@@ -6,13 +6,6 @@ Lyrics Status is a local Node.js app with a web control panel. It listens to you
 
 ---
 
-## Links
-
-- **Project:** https://github.com/bkiaf/Lyrics-Status-af
-- **AF:** https://guns.lol/boykisseraf
-
----
-
 ## Features
 
 - Real-time Discord custom status updates
