@@ -16,13 +16,9 @@ Lyrics Status is a local Node.js app with a web control panel. It listens to you
 ## Features
 
 - Real-time Discord custom status updates
-- Spotify playback detection
 - Synced lyrics support from multiple sources
 - Local web control panel
-- Custom Discord status templates
 - Timing and offset controls
-- Built-in themes and custom colors
-- Update checker with GitHub release support
 - Windows launchers for install and run
 
 ---
