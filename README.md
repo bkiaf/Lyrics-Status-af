@@ -6,6 +6,23 @@ Lyrics Status is a local Node.js app with a web control panel. It listens to you
 
 ---
 
+## Screenshots
+
+### Auth Tab
+![Auth Tab](assets/screenshots/auth-tab.png)
+
+### Display Settings
+![Display Settings](assets/screenshots/display-settings.png)
+
+### Timing
+![Timing Settings](assets/screenshots/Timing.png)
+
+### Theme Tab
+![Theme Tab](assets/screenshots/theme-tab.png)
+
+### Updater
+![Updater](assets/screenshots/updater.png)
+
 ## Features
 
 - Real-time Discord custom status updates
