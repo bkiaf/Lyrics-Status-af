@@ -430,11 +430,12 @@ $(`
               <span class="btn-label">Check for updates</span>
             </button>
             <button id="btn-do-update" class="btn btn-primary hid">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               <span class="btn-label">Update now</span>
             </button>
           </div>
           <div id="upd-status" class="update-status hid"></div>
+          <div id="upd-progress" class="update-progress hid"><span></span></div>
         </div>
       </div>
 
@@ -570,11 +571,25 @@ body {
   border-radius: 50%;
   margin-left: 4px;
   flex-shrink: 0;
-  animation: pulse-dot 2s ease-in-out infinite;
+  position: relative;
+  box-shadow: 0 0 0 rgba(240,160,90,0.45);
+  animation: pulse-dot 1.65s ease-in-out infinite;
+}
+.update-nav-dot::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: inherit;
+  border: 1px solid rgba(240,160,90,0.45);
+  animation: dot-ring 1.65s ease-out infinite;
 }
 @keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(0.85); }
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 rgba(240,160,90,0.0); }
+  50% { opacity: 0.78; transform: scale(0.86); box-shadow: 0 0 14px rgba(240,160,90,0.45); }
+}
+@keyframes dot-ring {
+  0% { opacity: 0.8; transform: scale(0.55); }
+  70%, 100% { opacity: 0; transform: scale(1.55); }
 }
 .update-version-row {
   display: flex;
@@ -586,6 +601,16 @@ body {
   flex-direction: column;
   gap: 2px;
   flex: 1;
+  padding: 12px 13px;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.045);
+  transition: transform 0.45s cubic-bezier(0.22,1,0.36,1), border-color 0.45s ease, background 0.45s ease;
+}
+.update-ver-block:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.11);
+  background: rgba(255,255,255,0.04);
 }
 .update-ver-label {
   font-size: 11px;
@@ -598,18 +623,55 @@ body {
   font-size: 15px;
   font-weight: 500;
   color: var(--text);
+  transition: color 0.35s ease, text-shadow 0.35s ease, transform 0.35s cubic-bezier(0.34,1.7,0.64,1);
 }
-.update-ver-val.has-update { color: var(--green); }
-.update-ver-arrow { color: var(--text3); flex-shrink: 0; }
+.update-ver-val.has-update {
+  color: var(--green);
+  text-shadow: 0 0 14px rgba(106,208,144,0.22);
+  animation: versionGlow 1.8s ease-in-out infinite;
+}
+@keyframes versionGlow {
+  0%,100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-1px) scale(1.025); }
+}
+.update-ver-arrow {
+  color: var(--text3);
+  flex-shrink: 0;
+  animation: arrowFloat 1.9s ease-in-out infinite;
+}
+@keyframes arrowFloat {
+  0%,100% { transform: translateX(0); opacity: 0.72; }
+  50% { transform: translateX(3px); opacity: 1; }
+}
 .update-action-row {
   display: flex;
   gap: 8px;
   align-items: center;
   flex-wrap: wrap;
 }
+.update-action-row .btn {
+  position: relative;
+  overflow: hidden;
+}
+.update-action-row .btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 0%, rgba(255,255,255,0.18) 45%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.75s cubic-bezier(0.22,1,0.36,1);
+  pointer-events: none;
+}
+.update-action-row .btn:hover::after { transform: translateX(120%); }
+.update-action-row .btn.is-loading svg { animation: updateSpin 0.95s linear infinite; }
+.update-action-row .btn.is-loading {
+  filter: brightness(1.08);
+  box-shadow: 0 0 0 3px var(--accent-bg), 0 8px 24px rgba(0,0,0,0.28);
+}
 .update-status {
+  position: relative;
   margin-top: 10px;
-  padding: 10px 12px;
+  padding: 11px 13px;
   border-radius: var(--radius-sm);
   font-size: 12.5px;
   font-family: 'JetBrains Mono', monospace;
@@ -617,10 +679,112 @@ body {
   border: 1px solid var(--border);
   color: var(--text2);
   line-height: 1.5;
+  overflow: hidden;
+  transform-origin: top center;
+  animation: updateStatusIn 0.42s cubic-bezier(0.22,1,0.36,1) both;
 }
-.update-status.success { background: rgba(106,208,144,0.08); border-color: rgba(106,208,144,0.25); color: var(--green); }
-.update-status.error   { background: rgba(244,127,127,0.08); border-color: rgba(244,127,127,0.25); color: var(--red); }
-.update-status.info    { background: var(--accent-bg); border-color: var(--accent-border); color: var(--accent); }
+.update-status.flash { animation: updateStatusPulse 0.48s cubic-bezier(0.22,1,0.36,1) both; }
+.update-status-main {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+.update-status-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 11px;
+  margin-top: 1px;
+  background: rgba(255,255,255,0.08);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+}
+.update-status-copy { min-width: 0; }
+.update-status.info::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.055) 42%, transparent 72%);
+  transform: translateX(-105%);
+  animation: statusShimmer 1.8s ease-in-out infinite;
+}
+.update-status.info .update-status-icon { animation: updateSpin 1s linear infinite; }
+.update-status.success .update-status-icon { animation: donePop 0.52s cubic-bezier(0.34,1.7,0.64,1) both; }
+.update-status.error .update-status-icon { animation: errorShake 0.42s cubic-bezier(0.36,0.07,0.19,0.97) both; }
+.update-status.success { background: rgba(106,208,144,0.08); border-color: rgba(106,208,144,0.25); color: var(--green); box-shadow: 0 0 0 1px rgba(106,208,144,0.05), 0 10px 30px rgba(106,208,144,0.055); }
+.update-status.error   { background: rgba(244,127,127,0.08); border-color: rgba(244,127,127,0.25); color: var(--red); box-shadow: 0 0 0 1px rgba(244,127,127,0.04), 0 10px 30px rgba(244,127,127,0.05); }
+.update-status.info    { background: var(--accent-bg); border-color: var(--accent-border); color: var(--accent); box-shadow: 0 0 0 1px rgba(255,255,255,0.02), 0 10px 30px rgba(0,0,0,0.16); }
+@keyframes updateStatusIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.985); filter: blur(3px); }
+  to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+@keyframes updateStatusPulse {
+  0% { opacity: 0.78; transform: translateY(4px) scale(0.99); }
+  65% { opacity: 1; transform: translateY(0) scale(1.012); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes updateSpin { to { transform: rotate(360deg); } }
+@keyframes statusShimmer {
+  0% { transform: translateX(-105%); }
+  55%,100% { transform: translateX(105%); }
+}
+@keyframes donePop {
+  0% { transform: scale(0.45); opacity: 0; }
+  65% { transform: scale(1.18); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes errorShake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-3px); }
+  40%, 60% { transform: translateX(3px); }
+}
+.update-progress {
+  position: relative;
+  height: 5px;
+  margin-top: 9px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.055);
+  animation: progressIn 0.32s cubic-bezier(0.22,1,0.36,1) both;
+}
+.update-progress span {
+  display: block;
+  height: 100%;
+  width: 42%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  filter: drop-shadow(0 0 8px var(--accent-border));
+  animation: progressSlide 1.05s ease-in-out infinite;
+}
+@keyframes progressIn {
+  from { opacity: 0; transform: scaleX(0.72); }
+  to { opacity: 1; transform: scaleX(1); }
+}
+@keyframes progressSlide {
+  0% { transform: translateX(-115%); }
+  100% { transform: translateX(255%); }
+}
+.upd-inline-notes {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    opacity: 0.85;
+    animation: notesIn 0.42s 0.04s cubic-bezier(0.22,1,0.36,1) both;
+}
+@keyframes notesIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 0.85; transform: translateY(0); }
+}
 .update-notes {
   font-size: 13px;
   color: var(--text2);
@@ -628,7 +792,9 @@ body {
   white-space: pre-wrap;
   max-height: 200px;
   overflow-y: auto;
+  animation: notesIn 0.48s cubic-bezier(0.22,1,0.36,1) both;
 }
+
 
 .nav { display: flex; flex-direction: column; gap: 2px; position: relative; }
 
@@ -1173,6 +1339,7 @@ let userTokenInput          = $("#user-token"),
     updCurrent              = $("#upd-current"),
     updLatest               = $("#upd-latest"),
     updStatus               = $("#upd-status"),
+    updProgress             = $("#upd-progress"),
     updNotesCard            = $("#upd-notes-card"),
     updNotes                = $("#upd-notes"),
     updateNavDot            = $("#update-nav-dot");
@@ -1355,9 +1522,26 @@ syncColorHex();
 // ─── UPDATE EVENTS ────────────────────────────────────────────────────────────
 let _pendingDownloadUrl = null;
 
-function setUpdStatus(msg, cls) {
-    updStatus.removeClass("hid success error info").text(msg);
+function setUpdStatus(msg, cls, working) {
+    const icon = cls === "success" ? "✓" : (cls === "error" ? "!" : "⟳");
+    updStatus.removeClass("hid success error info flash");
     if (cls) updStatus.addClass(cls);
+    updStatus.html(
+        '<div class="update-status-main">' +
+          '<span class="update-status-icon">' + icon + '</span>' +
+          '<div class="update-status-copy">' + msg + '</div>' +
+        '</div>'
+    );
+    updProgress.toggleClass("hid", !working);
+    if (updStatus[0]) {
+        void updStatus[0].offsetWidth;
+        updStatus.addClass("flash");
+    }
+}
+
+function setUpdateButtonsLoading(isLoading) {
+    btnDoUpdate.toggleClass("is-loading", isLoading);
+    btnCheckUpdate.toggleClass("is-loading", isLoading && btnDoUpdate.hasClass("hid"));
 }
 
 enableAutoupdateChk.change(() => {
@@ -1368,9 +1552,11 @@ enableAutoupdateChk.change(() => {
 btnCheckUpdate.click(async () => {
     const lbl = btnCheckUpdate.find(".btn-label");
     lbl.text("Checking...");
+    btnCheckUpdate.addClass("is-loading");
     btnCheckUpdate.prop("disabled", true);
     btnDoUpdate.addClass("hid");
     updStatus.addClass("hid");
+    updProgress.addClass("hid");
     updNotesCard.addClass("hid");
     _pendingDownloadUrl = null;
 
@@ -1388,29 +1574,40 @@ btnCheckUpdate.click(async () => {
             _pendingDownloadUrl = data.downloadUrl;
             btnDoUpdate.removeClass("hid");
             updateNavDot.removeClass("hid");
-            setUpdStatus("✦ New version " + data.latest + " is available!", "info");
+
+            // Build status message with release notes inline
+            let notesHtml = "";
+            if (data.releaseNotes && data.releaseNotes.trim()) {
+                const notes = data.releaseNotes.trim();
+                notesHtml = "<div class=\"upd-inline-notes\">" + notes.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>") + "</div>";
+            }
+            setUpdStatus("New version " + data.latest + " is available!" + notesHtml, "info", false);
 
             if (data.releaseNotes && data.releaseNotes.trim()) {
                 updNotes.text(data.releaseNotes.trim());
                 updNotesCard.removeClass("hid");
             }
         } else {
-            setUpdStatus("✓ You're up to date (" + data.current + ")", "success");
+            setUpdStatus("You're up to date (" + data.current + ")", "success", false);
         }
     } catch(e) {
-        setUpdStatus("Error: " + e.message, "error");
+        setUpdStatus("Error: " + e.message, "error", false);
     } finally {
         lbl.text("Check for updates");
+        btnCheckUpdate.removeClass("is-loading");
         btnCheckUpdate.prop("disabled", false);
     }
 });
 
 btnDoUpdate.click(async () => {
     if (!_pendingDownloadUrl) return;
+
+    const lbl = btnDoUpdate.find(".btn-label");
+    lbl.text("Updating...");
+    btnDoUpdate.addClass("is-loading");
     btnDoUpdate.prop("disabled", true);
     btnCheckUpdate.prop("disabled", true);
-    btnDoUpdate.find(".btn-label").text("Updating...");
-    setUpdStatus("Starting update...", "info");
+    setUpdStatus("Starting update...", "info", true);
 
     try {
         const res = await fetch("/api/do-update", {
@@ -1418,14 +1615,17 @@ btnDoUpdate.click(async () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ downloadUrl: _pendingDownloadUrl })
         });
+
         const data = await res.json();
-        if (!data.started) throw new Error("Server did not start update");
-        setUpdStatus("⟳ Downloading update...", "info");
+        if (!res.ok || data.error) throw new Error(data.error || "Failed to start update");
+
+        setUpdStatus("Update started. Please keep this window open...", "info", true);
     } catch(e) {
-        setUpdStatus("Error: " + e.message, "error");
+        setUpdStatus("Error: " + e.message, "error", false);
+        btnDoUpdate.removeClass("is-loading");
         btnDoUpdate.prop("disabled", false);
         btnCheckUpdate.prop("disabled", false);
-        btnDoUpdate.find(".btn-label").text("Update now");
+        lbl.text("Update now");
     }
 });
 
@@ -1589,14 +1789,16 @@ function connectWS() {
                 window._playback = data;
                 updateConnectionStatus();
             } else if (data.type === "update_progress") {
-                setUpdStatus("⟳ " + data.message, "info");
+                setUpdStatus(data.message, "info", true);
             } else if (data.type === "update_done") {
-                setUpdStatus("✓ " + data.message, "success");
+                setUpdStatus(data.message, "success", false);
                 updateNavDot.addClass("hid");
-                btnDoUpdate.addClass("hid");
+                btnDoUpdate.addClass("hid").removeClass("is-loading");
+                btnCheckUpdate.removeClass("is-loading").prop("disabled", false);
                 btnDoUpdate.find(".btn-label").text("Update now");
             } else if (data.type === "update_error") {
-                setUpdStatus("Error: " + data.message, "error");
+                setUpdStatus("Error: " + data.message, "error", false);
+                btnDoUpdate.removeClass("is-loading");
                 btnDoUpdate.prop("disabled", false);
                 btnCheckUpdate.prop("disabled", false);
                 btnDoUpdate.find(".btn-label").text("Update now");

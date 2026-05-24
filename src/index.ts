@@ -12,10 +12,33 @@ import { Settings } from "./Settings"
 import { SpotifyService } from "./SpotifyService"
 import { v4 as uuidv4 } from "uuid"
 import { ExternalAuthServerAPI } from "./ExternalAuthServerAPI"
+import { Updater } from "./Updater"
 
 Settings.load()
 
-init()
+async function checkAutoUpdate(): Promise<void> {
+    if (!Settings.update || !Settings.update.enableAutoupdate) return
+
+    console.log("\n  [Update] Auto-update enabled — checking for updates...\n")
+
+    try {
+        const result = await Updater.checkForUpdate()
+        if (!result.hasUpdate) {
+            console.log("  [Update] Already up to date (" + result.current + ")\n")
+            return
+        }
+
+        console.log("  [Update] New version available: " + result.latest + " (current: " + result.current + ")\n")
+        await Updater.doUpdate(result.downloadUrl, (msg) => console.log("  [Update] " + msg))
+
+        console.log("\n  [Update] ✓ Update applied! Restarting...\n")
+        setTimeout(() => process.exit(2), 1000)
+    } catch(e) {
+        console.log("  [Update] Check failed: " + (e as Error).message + " (continuing with current version)\n")
+    }
+}
+
+checkAutoUpdate().then(() => init())
 
 function init(): void {
     if (!Settings.credentials.uuid) {
@@ -74,7 +97,7 @@ function init(): void {
     `)
     }, 250)
 
-    startServer()
+    startServer(playbackState, statusChanger)
 }
 
 process.on("uncaughtException", (e) => {
