@@ -6,15 +6,22 @@ Lyrics Status is a local Node.js app with a web control panel. It listens to you
 
 ---
 
-![Auth Tab](assets/screenshots/auth-tab.png)
+## Screenshots
 
-![Display Settings](assets/screenshots/display-settings.png)
+### Auth Tab
+![Auth Tab](assets/%20%20%20screenshots/auth-tab.png)
 
-![Timing Settings](assets/screenshots/Timing.png)
+### Display Settings
+![Display Settings](assets/%20%20%20screenshots/display-settings.png)
 
-![Theme Tab](assets/screenshots/theme-tab.png)
+### Timing
+![Timing Settings](assets/%20%20%20screenshots/Timing.png)
 
-![Updater](assets/screenshots/updater.png)
+### Theme Tab
+![Theme Tab](assets/%20%20%20screenshots/theme-tab.png)
+
+### Updater
+![Updater](assets/%20%20%20screenshots/updater.png)
 
 ---
 
