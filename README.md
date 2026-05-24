@@ -22,6 +22,7 @@ Lyrics Status is a local Node.js app with a web control panel. It listens to you
 
 ### Updater
 ![Updater](assets/screenshots/updater.png)
+
 ---
 
 ## Features
