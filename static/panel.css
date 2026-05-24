@@ -1,4 +1,4 @@
-/* Lyrics Status v7.0.3 — static UI CSS.
+/* Lyrics Status v7.0.4 — static UI CSS.
    All formerly JS-injected static styles live here to avoid load-time layout/style flashes. */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -1302,7 +1302,7 @@ button:disabled { opacity: 0.62; cursor: default; transform: none !important; bo
 ::-webkit-scrollbar-thumb { background: linear-gradient(var(--surface3), var(--surface2)); border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); }
 ::-webkit-scrollbar-thumb:hover { background: var(--border2); }
 
-/* ── v7.0.3 ANIMATION FLASH FIX: single WAAPI tab engine ── */
+/* ── v7.0.4 ANIMATION FLASH FIX: single WAAPI tab engine ── */
 .content {
   display: grid !important;
   align-content: start !important;
@@ -1360,7 +1360,7 @@ button:disabled { opacity: 0.62; cursor: default; transform: none !important; bo
 }
 
 
-/* ── v7.0.3 PREMIUM UI POLISH PASS ─────────────────────────────────────────── */
+/* ── v7.0.4 PREMIUM UI POLISH PASS ─────────────────────────────────────────── */
 :root {
   --radius: 22px;
   --radius-sm: 14px;
@@ -1773,7 +1773,7 @@ body::after {
 
 
 
-/* ── v7.0.3 PERFORMANCE MOTION FIX ───────────────────────────────────────────
+/* ── v7.0.4 PERFORMANCE MOTION FIX ───────────────────────────────────────────
    Keeps the UI smooth, but removes expensive blur/backdrop/infinite glow work
    that can make lower-end PCs stutter. */
 :root {
@@ -1916,7 +1916,7 @@ body::before { opacity: 0.16 !important; }
 }
 
 
-/* ── v7.0.3 BALANCED LUXE VISUALS ───────────────────────────────────────────
+/* ── v7.0.4 BALANCED LUXE VISUALS ───────────────────────────────────────────
    Premium glass look without bringing back heavy moving blur. Static blur only,
    lighter glows, and smoother-but-cheap transitions. */
 :root {
@@ -3263,7 +3263,7 @@ textarea.input {
 
 
 /* ── startup layout lock: ready before panel.js runs ─────────────────── */
-/* v7.0.3 critical layout: prevents sidebar/content distance flash before late UI patches run */
+/* v7.0.4 critical layout: prevents sidebar/content distance flash before late UI patches run */
 @media (min-width: 761px) {
   .content {
     position: fixed !important;
@@ -3325,7 +3325,7 @@ textarea.input {
   }
 }
 
-/* ── v7.0.3 What's New GitHub popup ─────────────────────────────────── */
+/* ── v7.0.4 What's New GitHub popup ─────────────────────────────────── */
 .whats-new-backdrop {
   position: fixed;
   inset: 0;
@@ -3694,7 +3694,7 @@ body.whats-new-open .content { scrollbar-gutter: stable; }
   .whats-new-actions .btn { width: 100%; justify-content: center; }
 }
 
-/* ── v7.0.3 What's New real pop animation fix ──────────────────────────────
+/* ── v7.0.4 What's New real pop animation fix ──────────────────────────────
    The modal now starts from a hidden CSS state, then JS only toggles classes.
    This guarantees the entrance animation plays after the page has loaded. */
 .whats-new-backdrop {
@@ -3814,7 +3814,7 @@ body.whats-new-open .content { scrollbar-gutter: stable; }
   }
 }
 
-/* ── v7.0.3 What's New visible pop fix ─────────────────────────────────────
+/* ── v7.0.4 What's New visible pop fix ─────────────────────────────────────
    Fixes the blur-only state by using transition-based visibility instead of
    keyframe animation fighting the hidden !important base state. */
 #whats-new-backdrop.whats-new-backdrop {
@@ -3907,7 +3907,7 @@ body.whats-new-open .content { scrollbar-gutter: stable; }
 #whats-new-backdrop.show .whats-new-actions { transition-delay: 275ms !important; }
 
 
-/* ── v7.0.3 What's New lag + glass notes polish ────────────────────────────
+/* ── v7.0.4 What's New lag + glass notes polish ────────────────────────────
    Final override: lighter GPU-friendly pop, and release notes glass matching
    the settings cards. No JS-injected CSS. */
 #whats-new-backdrop.whats-new-backdrop {
@@ -4019,7 +4019,7 @@ body.whats-new-open .content { scrollbar-gutter: stable; }
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.055) !important;
 }
 
-/* ── v7.0.3 CSS-only soft snow dots background ────────────────────────────
+/* ── v7.0.4 CSS-only soft snow dots background ────────────────────────────
    Subtle falling dots that live behind the UI. No JS, no injected styles. */
 #app {
   isolation: isolate;
@@ -4104,7 +4104,7 @@ body.whats-new-open .content { scrollbar-gutter: stable; }
   }
 }
 
-/* ── v7.0.3 animated falling snow dots override ────────────────────────────
+/* ── v7.0.4 animated falling snow dots override ────────────────────────────
    Makes the soft background dots visibly fall downward in a continuous loop. */
 #app::before,
 #app::after {
@@ -4156,7 +4156,7 @@ body.whats-new-open .content { scrollbar-gutter: stable; }
   #app::after { animation-duration: 28s !important; opacity: 0.28 !important; }
 }
 
-/* ── v7.0.3 fast background/theme switch performance patch ────────────────
+/* ── v7.0.4 fast background/theme switch performance patch ────────────────
    Keeps the snow, but makes theme/background changes snap faster with less jank. */
 :root {
   --theme-swap-fast: 95ms;
@@ -4193,7 +4193,7 @@ html.theme-fast-switch .whats-new-notes {
 /* Snow visuals restored to the original animated falling dots.
    Fast theme switching still pauses animation briefly during color changes. */
 
-/* ── v7.0.3 Project GitHub card in Updates ───────────────────────────── */
+/* ── v7.0.4 Project GitHub card in Updates ───────────────────────────── */
 .github-project-card {
   overflow: hidden;
 }
@@ -4244,7 +4244,7 @@ html.theme-fast-switch .whats-new-notes {
   }
 }
 
-/* ── v7.0.3 smoother update/check flow ───────────────────────────────────── */
+/* ── v7.0.4 smoother update/check flow ───────────────────────────────────── */
 #update-main-card.update-main-card {
   position: relative;
   overflow: visible !important;
@@ -4592,7 +4592,7 @@ html.theme-fast-switch .whats-new-notes {
 }
 
 
-/* ── v7.0.3 ultra smooth update motion ─────────────────────────────────────
+/* ── v7.0.4 ultra smooth update motion ─────────────────────────────────────
    Keep every update element in an animatable state instead of display:none. */
 #update-main-card.update-main-card {
   transition:
@@ -4896,7 +4896,7 @@ html.theme-fast-switch .whats-new-notes {
   }
 }
 
-/* ── v7.0.3 silky Check / Install / Restart stage motion ──────────────────
+/* ── v7.0.4 silky Check / Install / Restart stage motion ──────────────────
    Makes the update stages open, morph, load, and close with slower velvet
    transitions. CSS owns the motion; JS only toggles tiny helper classes. */
 .update-flow {

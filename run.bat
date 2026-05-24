@@ -2,8 +2,10 @@
 setlocal EnableExtensions EnableDelayedExpansion
 chcp 65001 >nul
 cd /d "%~dp0"
-title AF - Lyrics Status v7.0.3
-color 0D
+title AF - Lyrics Status v7.0.4
+color 09
+
+call :setupColors
 
 :start
 call :hero "LAUNCHER" "Smooth startup console"
@@ -14,7 +16,7 @@ node --version >nul 2>nul
 if errorlevel 1 (
     call :error "Node.js was not found."
     echo.
-    echo   Run install.bat first, or install Node.js from: https://nodejs.org/en
+    echo   !AF_DIM!Run install.bat first, or install Node.js from: https://nodejs.org/en!AF_RESET!
     echo.
     pause
     exit /b 1
@@ -23,7 +25,7 @@ if errorlevel 1 (
 if not exist "node_modules" (
     call :error "Dependencies are missing."
     echo.
-    echo   Run install.bat first.
+    echo   !AF_DIM!Run install.bat first.!AF_RESET!
     echo.
     pause
     exit /b 1
@@ -35,16 +37,16 @@ call :ok "Dependencies ready"
 call :bar "Loading dashboard"
 
 call :section "STARTUP"
-echo      Local URL: http://localhost:8999
-echo      Press Ctrl+C to stop the app.
+echo      !AF_DIM!Local URL: http://localhost:8999!AF_RESET!
+echo      !AF_DIM!Press Ctrl+C to stop the app.!AF_RESET!
 echo.
 call :bar "Opening browser"
 start "" "http://localhost:8999"
 
 echo.
-echo      ╔══════════════════════════════════════════════════════════════╗
-echo      ║  AF server is starting... keep this window open.             ║
-echo      ╚══════════════════════════════════════════════════════════════╝
+echo      !AF_ACCENT!╔══════════════════════════════════════════════════════════════╗!AF_RESET!
+echo      !AF_ACCENT!║  AF server is starting... keep this window open.             ║!AF_RESET!
+echo      !AF_ACCENT!╚══════════════════════════════════════════════════════════════╝!AF_RESET!
 echo.
 
 npm run start
@@ -58,12 +60,22 @@ if "%EXIT_CODE%" == "2" (
 )
 
 echo.
-echo      ╔══════════════════════════════════════════════════════════════╗
-echo      ║  App stopped.                                                ║
-echo      ╚══════════════════════════════════════════════════════════════╝
+echo      !AF_ACCENT!╔══════════════════════════════════════════════════════════════╗!AF_RESET!
+echo      !AF_ACCENT!║  App stopped.                                                ║!AF_RESET!
+echo      !AF_ACCENT!╚══════════════════════════════════════════════════════════════╝!AF_RESET!
 echo.
 pause
 exit /b 0
+
+:setupColors
+for /f "delims=" %%a in ('powershell -NoProfile -Command "[char]27" 2^>nul') do set "ESC=%%a"
+set "AF_ACCENT=!ESC![38;2;146;152;255m"
+set "AF_DIM=!ESC![38;2;185;188;255m"
+set "AF_SOFT=!ESC![38;2;120;126;220m"
+set "AF_OK=!ESC![38;2;146;255;205m"
+set "AF_ERR=!ESC![38;2;255;120;150m"
+set "AF_RESET=!ESC![0m"
+exit /b
 
 :hero
 cls
@@ -72,67 +84,67 @@ if /I "%~1"=="INSTALLER" goto hero_installer
 goto hero_launcher
 
 :hero_installer
-echo      ╔══════════════════════════════════════════════════════════════╗
-echo      ║                                                              ║
-echo      ║        █████╗  ███████╗                                      ║
-echo      ║       ██╔══██╗ ██╔════╝                                      ║
-echo      ║       ███████║ █████╗        LYRICS STATUS                   ║
-echo      ║       ██╔══██║ ██╔══╝        v7.0.3                          ║
-echo      ║       ██║  ██║ ██║           INSTALLER                       ║
-echo      ║       ╚═╝  ╚═╝ ╚═╝                                           ║
-echo      ║                                                              ║
-echo      ║               Premium setup for Lyrics Status                ║
-echo      ║      GitHub:  https://github.com/bkiaf/Lyrics-Status-af      ║
-echo      ║            Profile: https://guns.lol/boykisseraf             ║
-echo      ║                                                              ║
-echo      ╚══════════════════════════════════════════════════════════════╝
+echo      !AF_ACCENT!╔══════════════════════════════════════════════════════════════╗!AF_RESET!
+echo      !AF_ACCENT!║                                                              ║!AF_RESET!
+echo      !AF_ACCENT!║        █████╗  ███████╗                                      ║!AF_RESET!
+echo      !AF_ACCENT!║       ██╔══██╗ ██╔════╝                                      ║!AF_RESET!
+echo      !AF_ACCENT!║       ███████║ █████╗        LYRICS STATUS                   ║!AF_RESET!
+echo      !AF_ACCENT!║       ██╔══██║ ██╔══╝        v7.0.4                          ║!AF_RESET!
+echo      !AF_ACCENT!║       ██║  ██║ ██║           INSTALLER                       ║!AF_RESET!
+echo      !AF_ACCENT!║       ╚═╝  ╚═╝ ╚═╝                                           ║!AF_RESET!
+echo      !AF_ACCENT!║                                                              ║!AF_RESET!
+echo      !AF_ACCENT!║               Premium setup for Lyrics Status                ║!AF_RESET!
+echo      !AF_ACCENT!║      GitHub:  https://github.com/bkiaf/Lyrics-Status-af      ║!AF_RESET!
+echo      !AF_ACCENT!║            Profile: https://guns.lol/boykisseraf             ║!AF_RESET!
+echo      !AF_ACCENT!║                                                              ║!AF_RESET!
+echo      !AF_ACCENT!╚══════════════════════════════════════════════════════════════╝!AF_RESET!
 echo.
 exit /b
 
 :hero_launcher
-echo      ╔══════════════════════════════════════════════════════════════╗
-echo      ║                                                              ║
-echo      ║        █████╗  ███████╗                                      ║
-echo      ║       ██╔══██╗ ██╔════╝                                      ║
-echo      ║       ███████║ █████╗        LYRICS STATUS                   ║
-echo      ║       ██╔══██║ ██╔══╝        v7.0.3                          ║
-echo      ║       ██║  ██║ ██║           LAUNCHER                        ║
-echo      ║       ╚═╝  ╚═╝ ╚═╝                                           ║
-echo      ║                                                              ║
-echo      ║                    Smooth startup console                    ║
-echo      ║      GitHub:  https://github.com/bkiaf/Lyrics-Status-af      ║
-echo      ║            Profile: https://guns.lol/boykisseraf             ║
-echo      ║                                                              ║
-echo      ╚══════════════════════════════════════════════════════════════╝
+echo      !AF_ACCENT!╔══════════════════════════════════════════════════════════════╗!AF_RESET!
+echo      !AF_ACCENT!║                                                              ║!AF_RESET!
+echo      !AF_ACCENT!║        █████╗  ███████╗                                      ║!AF_RESET!
+echo      !AF_ACCENT!║       ██╔══██╗ ██╔════╝                                      ║!AF_RESET!
+echo      !AF_ACCENT!║       ███████║ █████╗        LYRICS STATUS                   ║!AF_RESET!
+echo      !AF_ACCENT!║       ██╔══██║ ██╔══╝        v7.0.4                          ║!AF_RESET!
+echo      !AF_ACCENT!║       ██║  ██║ ██║           LAUNCHER                        ║!AF_RESET!
+echo      !AF_ACCENT!║       ╚═╝  ╚═╝ ╚═╝                                           ║!AF_RESET!
+echo      !AF_ACCENT!║                                                              ║!AF_RESET!
+echo      !AF_ACCENT!║                    Smooth startup console                    ║!AF_RESET!
+echo      !AF_ACCENT!║      GitHub:  https://github.com/bkiaf/Lyrics-Status-af      ║!AF_RESET!
+echo      !AF_ACCENT!║            Profile: https://guns.lol/boykisseraf             ║!AF_RESET!
+echo      !AF_ACCENT!║                                                              ║!AF_RESET!
+echo      !AF_ACCENT!╚══════════════════════════════════════════════════════════════╝!AF_RESET!
 echo.
 exit /b
 
 :section
 echo.
-echo      ── %~1 ─────────────────────────────────────────────
+echo      !AF_ACCENT!── %~1 ─────────────────────────────────────────────!AF_RESET!
 echo.
 exit /b
 
 :ok
-echo      [ OK ] %~1
+echo      !AF_OK![ OK ]!AF_RESET! !AF_DIM!%~1!AF_RESET!
 exit /b
 
 :error
-echo      [ !! ] %~1
+echo      !AF_ERR![ !! ]!AF_RESET! !AF_DIM!%~1!AF_RESET!
 exit /b
 
 :success
 echo.
-echo      ╔══════════════════════════════════════════════════════════════╗
-echo      ║  ✓ %~1
-echo      ║  %~2
-echo      ╚══════════════════════════════════════════════════════════════╝
+echo      !AF_ACCENT!╔══════════════════════════════════════════════════════════════╗!AF_RESET!
+echo      !AF_ACCENT!║  ✓ %~1!AF_RESET!
+echo      !AF_ACCENT!║  %~2!AF_RESET!
+echo      !AF_ACCENT!╚══════════════════════════════════════════════════════════════╝!AF_RESET!
 echo.
 exit /b
 
 :bar
 set "AF_BAR_LABEL=%~1"
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$label=$env:AF_BAR_LABEL; $w=28; Write-Host ('     ' + $label + '  ') -NoNewline -ForegroundColor Gray; Write-Host '[' -NoNewline -ForegroundColor DarkGray; for($i=1;$i -le $w;$i++){ Write-Host '█' -NoNewline -ForegroundColor Magenta; Start-Sleep -Milliseconds 18 }; Write-Host '] 100%%' -ForegroundColor Cyan" 2>nul
-if errorlevel 1 echo      %~1  [████████████████████████████] 100%%
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$label=$env:AF_BAR_LABEL; $w=28; $esc=[char]27; $a=$esc+'[38;2;146;152;255m'; $d=$esc+'[38;2;120;126;220m'; $r=$esc+'[0m'; Write-Host ('     ' + $label + '  ') -NoNewline; Write-Host ($d+'['+$r) -NoNewline; for($i=1;$i -le $w;$i++){ Write-Host ($a+'█'+$r) -NoNewline; Start-Sleep -Milliseconds 18 }; Write-Host ($d+'] '+$a+'100%%'+$r)" 2>nul
+if errorlevel 1 echo      !AF_DIM!%~1  [!AF_ACCENT!████████████████████████████!AF_DIM!] !AF_ACCENT!100%%!AF_RESET!
 set "AF_BAR_LABEL="
 exit /b

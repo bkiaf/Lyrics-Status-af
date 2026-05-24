@@ -16,6 +16,9 @@ import { Updater } from "./Updater"
 
 Settings.load()
 
+const AF_CONSOLE_ACCENT = "\x1b[38;2;146;152;255m"
+const AF_CONSOLE_RESET = "\x1b[0m"
+
 async function checkAutoUpdate(): Promise<void> {
     if (!Settings.update || !Settings.update.enableAutoupdate) return
 
@@ -88,13 +91,15 @@ function init(): void {
         if (playbackState.ended) statusChanger.songChanged()
 
         console.clear()
-        console.log(`
+        console.log(`${AF_CONSOLE_ACCENT}
+    ────────────────────────────
     Song:          ${playbackState.songName || "Not listening"}
     Author:        ${playbackState.songAuthor || "Not listening"}
     Progress:      ${statusChanger.formatSeconds(+(playbackState.songProgress / 1000).toFixed(0))}
     Current line:  ${(playbackState.currentLine && playbackState.currentLine.text) || (playbackState.hasLyrics ? "Waiting..." : "No lyrics")}
     Fetched from:  ${lyricsFetcher.lastFetchedFrom}
-    `)
+    ────────────────────────────
+    ${AF_CONSOLE_RESET}`)
     }, 250)
 
     startServer(playbackState, statusChanger)

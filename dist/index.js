@@ -17,6 +17,8 @@ const ExternalAuthServerAPI_1 = require("./ExternalAuthServerAPI");
 const Updater_1 = require("./Updater");
 
 Settings_1.Settings.load();
+const AF_CONSOLE_ACCENT = "\x1b[38;2;146;152;255m";
+const AF_CONSOLE_RESET = "\x1b[0m";
 
 // ─── AUTO-UPDATE CHECK ────────────────────────────────────────────────────────
 async function checkAutoUpdate() {
@@ -82,13 +84,15 @@ function init() {
         if (playbackState.ended)
             statusChanger.songChanged();
         console.clear();
-        console.log(`
+        console.log(`${AF_CONSOLE_ACCENT}
+    ────────────────────────────
     Song:          ${playbackState.songName || "Not listening"}
     Author:        ${playbackState.songAuthor || "Not listening"}
     Progress:      ${statusChanger.formatSeconds(+(playbackState.songProgress / 1000).toFixed(0))}
     Current line:  ${(playbackState.currentLine && playbackState.currentLine.text) || (playbackState.hasLyrics ? "Waiting..." : "No lyrics")}
     Fetched from:  ${lyricsFetcher.lastFetchedFrom}
-    `);
+    ────────────────────────────
+    ${AF_CONSOLE_RESET}`);
     }, 250);
     (0, Server_1.startServer)(playbackState, statusChanger);
 }
