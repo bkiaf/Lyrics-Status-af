@@ -66,8 +66,3 @@ Open the **Theme** tab to switch between 5 built-in presets (Dark, Purple, Ocean
 ---
 
 *This tool is provided as-is. Use at your own risk.*
-
-
-## v7.0.3 Premium UI Polish
-- Refined glassy card styling, spacing, sidebar, buttons, inputs, toggles, theme cards, and update panels.
-- Kept the version at 7.0.3 as requested.
