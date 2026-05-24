@@ -1,51 +1,38 @@
 # AF — Lyrics Status
 
-> A polished local control panel that updates your Discord custom status with real-time Spotify lyrics.
+> Automatically updates your Discord custom status with real-time song lyrics from Spotify.
 
-<p align="center">
-  <strong>Lyrics Status af · v7.0.3</strong><br>
-  Glass UI · Smooth animations · Spotify lyrics sync · Discord status updates
-</p>
-
-<p align="center">
-  <a href="https://github.com/bkiaf/Lyrics-Status-af">Project GitHub</a>
-  ·
-  <a href="https://guns.lol/boykisseraf">AF Profile</a>
-</p>
+Lyrics Status is a local Node.js app with a web control panel. It listens to your current Spotify playback, finds synced lyrics from supported sources, and updates your Discord custom status line by line.
 
 ---
 
-## About
+## Links
 
-**Lyrics Status af** is a Node.js + TypeScript app that automatically updates your Discord custom status with the current lyric line from the song you are listening to on Spotify.
-
-It runs locally on your machine and includes a redesigned web panel for authentication, display customization, timing controls, themes, updates, and status monitoring.
+- **Project:** https://github.com/bkiaf/Lyrics-Status-af
+- **AF:** https://guns.lol/boykisseraf
 
 ---
 
 ## Features
 
-- Real-time Spotify playback detection.
-- Synced lyric fetching from multiple sources.
-- Automatic Discord custom status updates.
-- Clean glass-style control panel.
-- Built-in theme presets and custom theme colors.
-- Animated background snow dots.
-- Smooth sidebar navigation and tab transitions.
-- Improved startup layout with CSS loaded immediately.
-- What's New popup powered by GitHub release notes.
-- Option to hide the What's New popup until the next update.
-- Smooth update flow with check, install, loading, success, and error states.
-- Premium AF-styled `install.bat` and `run.bat` launchers.
+- Real-time Discord custom status updates
+- Spotify playback detection
+- Synced lyrics support from multiple sources
+- Local web control panel
+- Custom Discord status templates
+- Timing and offset controls
+- Built-in themes and custom colors
+- Update checker with GitHub release support
+- Windows launchers for install and run
 
 ---
 
 ## Requirements
 
 | Requirement | Version |
-|---|---:|
+|---|---|
 | [Node.js](https://nodejs.org/en) | v17 or higher |
-| Windows | 10 / 11 recommended |
+| Windows | 10 / 11 for `.bat` launchers |
 | Spotify account | Free or Premium |
 | Discord account | Required |
 
@@ -53,34 +40,37 @@ It runs locally on your machine and includes a redesigned web panel for authenti
 
 ## Installation
 
-### Option 1 — Use the BAT installer
+### 1. Download
 
-1. Download the latest ZIP from the GitHub release.
-2. Extract the ZIP anywhere on your computer.
-3. Double-click **`install.bat`**.
-4. Wait until the dependency installation is complete.
+Download the project ZIP and extract it anywhere on your computer.
 
-### Option 2 — Manual install
+### 2. Install dependencies
 
-Open a terminal inside the project folder and run:
+Double-click:
+
+```bat
+install.bat
+```
+
+Or install manually from a terminal:
 
 ```bash
 npm install
 ```
 
+> If you get a permissions error, right-click `install.bat` and choose **Run as administrator**.
+
 ---
 
-## Running the App
+## Running
 
-### Option 1 — Use the BAT launcher
+Double-click:
 
-Double-click **`run.bat`**.
+```bat
+run.bat
+```
 
-The launcher starts the local server and opens the panel in your browser.
-
-### Option 2 — Manual run
-
-Open a terminal inside the project folder and run:
+Or run manually:
 
 ```bash
 npm run start
@@ -92,76 +82,96 @@ Then open:
 http://localhost:8999
 ```
 
-To stop the app, press **Ctrl + C** in the terminal.
+Press **Ctrl+C** in the terminal to stop the app.
 
 ---
 
 ## Setup Guide
 
-### 1. Discord Token
+Once the panel is open, complete the setup from the **Auth** tab.
 
-Paste your Discord user token into:
+### Discord Token
 
-```text
-Auth → User token
-```
+You need your Discord user token so the tool can update your custom status.
 
-Then click **Check** to verify it.
+1. Open Discord in your browser.
+2. Press `F12` to open DevTools.
+3. Go to the **Network** tab.
+4. Reload Discord or send any message.
+5. Look for a request to `discord.com/api`.
+6. Open the request and check **Request Headers**.
+7. Copy the value from the `Authorization` header.
+8. Paste it into **Auth → User token** and click **Check**.
 
-> ⚠️ Never share your Discord token with anyone. It gives access to your account. Use this tool at your own risk.
+> ⚠️ Never share your Discord token with anyone. It gives access to your account.
 
-### 2. Spotify App
+### Spotify App
 
 1. Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
-2. Create a new app.
-3. Copy your **Client ID** and **Client Secret**.
-4. Add this Redirect URI in the Spotify app settings:
+2. Log in and click **Create app**.
+3. Fill in any name and description.
+4. Add this Redirect URI:
 
 ```text
 http://localhost/callback
 ```
 
-5. Paste the same Redirect URI into the panel.
-6. Click **Authorize Spotify**.
-7. Complete the Spotify login flow.
+5. Save the app.
+6. Copy your **Client ID** and **Client Secret** into the panel.
+7. Paste the same Redirect URI into the panel.
+8. Click **Authorize Spotify**.
 
-### 3. Play Music
-
-Open Spotify and play a song. If synced lyrics are available, the app will update your Discord status automatically.
+After authorization, play a song on Spotify. If synced lyrics are available, they will start appearing in your Discord custom status.
 
 ---
 
-## Panel Overview
+## Connection Status
 
-| Tab | What it does |
+The status indicator in the panel shows what the app is currently doing.
+
+| State | Meaning |
 |---|---|
-| **Auth** | Add Discord and Spotify credentials. |
-| **Display** | Customize how lyrics appear in your Discord status. |
-| **Timing** | Adjust lyric sync and offset behavior. |
-| **Theme** | Choose presets or create a custom theme. |
-| **Updates** | Check GitHub for updates and install new versions. |
+| Disconnected | The server is not running or the panel cannot reach it |
+| Incomplete | Discord or Spotify setup is missing |
+| Not playing | Spotify is connected, but nothing is currently playing |
+| Buffering | A song is playing, but lyrics are still syncing |
+| Live | Everything is working and lyrics are updating |
 
 ---
 
-## Display Template Placeholders
+## Display Settings
 
-Use these placeholders in the custom display template:
+In the **Display** tab, you can customize what appears in your Discord status.
+
+Available template placeholders:
 
 | Placeholder | Description |
 |---|---|
-| `{lyrics}` | Current lyric line |
+| `{lyrics}` | Current lyrics line |
 | `{song_name}` | Song title |
 | `{song_author}` | Artist name |
-| `{timestamp}` | Playback timestamp |
+| `{timestamp}` | Current playback position |
 | `{lyrics_upper}` | Lyrics in uppercase |
 | `{lyrics_lower}` | Lyrics in lowercase |
 | `{lyrics_letters_only}` | Lyrics with symbols removed |
 
 ---
 
-## Theme Presets
+## Timing Settings
 
-The panel includes five built-in presets:
+In the **Timing** tab, you can adjust how lyrics sync with the song.
+
+- **Auto-offset** automatically adjusts for Discord API delay.
+- **Manual offset** lets you control the timing manually.
+- **Auto-offset samples** controls how many recent requests are used for delay averaging.
+
+---
+
+## Themes
+
+In the **Theme** tab, you can choose a built-in theme or create your own custom colors.
+
+Built-in presets include:
 
 - Dark
 - Purple
@@ -169,60 +179,41 @@ The panel includes five built-in presets:
 - Sunset
 - Forest
 
-You can also set a fully custom accent color and background color.
-
 ---
 
 ## Updates
 
-The app can check GitHub releases directly from the **Updates** tab.
+The **Updates** tab can check GitHub for new releases and install updates when available.
 
-The update screen includes:
+For updates to work correctly, the release ZIP should contain the project folder directly:
 
-- Smooth check animation.
-- Update progress states.
-- Install and restart stages.
-- Success and error feedback.
-- A GitHub project shortcut.
+```text
+lyrics-status-v7/
+  package.json
+  VERSION
+  static/
+  dist/
+  run.bat
+  install.bat
+```
 
-After updating, the **What's New** popup shows the latest release notes from GitHub. You can hide it until the next update.
-
----
-
-## v7.0.3 — Visual Polish & Experience Update
-
-This release focuses on making Lyrics Status feel smoother, cleaner, and more premium across the whole app. It improves the UI, animations, update experience, startup behavior, background effects, and launcher files.
-
-### What's New
-
-- Improved the overall UI with a cleaner glass-style layout.
-- Moved important styling into CSS so the interface is ready immediately on startup.
-- Fixed startup layout flashing where the content briefly appeared far from the sidebar.
-- Improved sidebar spacing and panel alignment.
-- Added a smooth **What's New** popup that loads release notes from GitHub.
-- Added a **Don't show this again until the next update** option for the What's New popup.
-- Added animated background snow dots with a soft, theme-matching look.
-- Improved background and theme switching speed.
-- Added a **Project GitHub** section inside the Updates page.
-- Improved the update screen with smoother check, install, loading, success, and error animations.
-- Added smoother transitions for update stages appearing and disappearing.
-- Improved buttons, cards, toggles, hover states, and glass effects.
-- Improved `install.bat` and `run.bat` with a premium AF-styled launcher look.
-- Added project and profile links inside the BAT launcher frames.
-- Removed the old duplicated console logo from `run.bat`.
-
-### Fixes
-
-- Fixed empty tab content after switching sidebar sections.
-- Fixed layout jump on first page load.
-- Fixed visual clipping around cards and panels.
-- Fixed What's New popup visibility and animation issues.
-- Reduced animation lag in the popup and update screen.
-- Fixed BAT frame alignment issues.
+Avoid wrapping the project folder inside an extra folder.
 
 ---
 
 ## Troubleshooting
+
+### Status stays on Not playing
+
+Make sure Spotify is open and a song is actively playing.
+
+### Discord token is missing or invalid
+
+Re-paste your Discord token in the **Auth** tab and click **Check**.
+
+### Spotify is not connected
+
+Click **Authorize Spotify** again and complete the login flow.
 
 ### Panel does not open
 
@@ -232,53 +223,36 @@ Make sure Node.js is installed:
 node --version
 ```
 
-If the port is already in use, close any old running instance and try again.
+Also make sure nothing else is using port `8999`.
 
-### Status stays orange or says Not playing
+### Lyrics are off-sync
 
-Make sure Spotify is open and a song is actively playing.
-
-### Discord token shows incomplete
-
-Re-paste the token in the **Auth** tab and click **Check**.
-
-### Spotify is not connected
-
-Click **Authorize Spotify** again and complete the login flow.
-
-### Lyrics are early or late
-
-Open the **Timing** tab and adjust the manual offset. Auto-offset is recommended.
+Enable **Auto-offset** in the **Timing** tab. If needed, adjust the manual offset.
 
 ### No lyrics found
 
-Some songs do not have synced lyrics available. The app will try multiple lyric sources automatically.
+Some songs do not have synced lyrics available. The app will try supported lyric sources automatically.
 
 ---
 
 ## Tech Stack
 
-- **TypeScript** — app source code
-- **Node.js** — runtime
-- **Express** — local web server
-- **WebSocket (ws)** — real-time panel communication
-- **jQuery** — panel UI logic
-- **CSS** — glass UI, transitions, themes, and animations
+- **TypeScript**
+- **Node.js**
+- **Express**
+- **WebSocket**
+- **jQuery**
 
 ---
 
 ## Credits
 
-The original concept and core idea are based on:
+The original concept and core idea is based on [OvalQuilter/lyrics-status](https://github.com/OvalQuilter/lyrics-status).
 
-- [OvalQuilter/lyrics-status](https://github.com/OvalQuilter/lyrics-status)
-
-This AF fork includes visual redesigns, UI improvements, update flow polish, launcher styling, and additional fixes.
+This fork adds its own fixes, UI work, launcher styling, and control panel improvements.
 
 ---
 
 ## Disclaimer
 
-This project is provided as-is. Use it at your own risk.
-
-Automating Discord actions with a user token may violate Discord's Terms of Service.
+Use this tool at your own risk. Automating Discord actions using a user token may violate Discord's Terms of Service.
