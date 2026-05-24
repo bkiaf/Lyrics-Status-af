@@ -131,7 +131,7 @@ The bottom-left corner of the panel shows the current status:
 | ⚪ Gray | Not configured | No credentials entered yet |
 | 🟠 Orange | Incomplete | One service is missing or not set up |
 | 🟠 Orange | Not playing | Both connected but Spotify isn't playing |
-| 🟠 Orange | Buffering… | Playing but lyrics haven't synced yet |
+| 🟡 Yellow | Buffering… | Playing but lyrics haven't synced yet |
 | 🟢 Green | Live | Everything is working — lyrics are updating |
 
 ---
