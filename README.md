@@ -1,4 +1,4 @@
-# Lyrics Status v7
+# Lyrics Status af
 
 **Lyrics Status** is a tool that automatically updates your Discord custom status to display the current lyrics of any song you're listening to on Spotify.
 
