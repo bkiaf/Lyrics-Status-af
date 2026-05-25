@@ -4,7 +4,7 @@
 
 **Quick Start**: Download, extract, run `Lyrics Status.exe`. That's it.
 
-Lyrics Status runs locally on your PC...
+Lyrics Status runs locally on your PC.
 
 ---
 
@@ -16,15 +16,12 @@ Lyrics Status runs locally on your PC...
 - Local web control panel.
 - Timing and offset controls.
 - Built-in updater.
-- 
+
 ---
 
 ## Download
 
 Download the latest release from GitHub Releases, then extract the ZIP anywhere you want.
-
-Use this file from the release assets:
-
 
 After extracting, open the folder and run:
 
@@ -71,18 +68,11 @@ This means your Discord token, Spotify settings, and saved preferences stay on t
 
 After launching the app, complete setup from the **Auth** tab.
 
-### Discord Token
+### Discord
 
-1. Open Discord in your browser.
-2. Press `F12` to open DevTools.
-3. Go to the **Network** tab.
-4. Reload Discord or send any message.
-5. Look for a request to `discord.com/api`.
-6. Open the request and check **Request Headers**.
-7. Copy the `Authorization` value.
-8. Paste it into **Auth → User token** and click **Check**.
+Enter your Discord account setting locally inside the **Auth** tab.
 
-Never share your Discord token with anyone.
+Never share private tokens, secrets, or `settings.json` with anyone.
 
 ### Spotify App
 
@@ -126,7 +116,7 @@ Open the **Auth** tab and authorize Spotify again.
 
 ### Discord status is not updating
 
-Re-check your Discord token in the **Auth** tab.
+Re-check your local Discord setting in the **Auth** tab.
 
 ---
 
@@ -140,4 +130,4 @@ This fork includes its own UI, updater, launcher, and setup improvements.
 
 ## Disclaimer
 
-Use this tool at your own risk. Automating Discord actions with a user token may violate Discord's Terms of Service.
+Use this tool at your own risk. Connected services may have their own rules and limitations.
