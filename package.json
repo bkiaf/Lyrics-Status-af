@@ -1,6 +1,6 @@
 {
   "name": "lyrics-status-v7",
-  "version": "7.0.4",
+  "version": "7.0.4.1",
   "description": "Changes your Discord status to song lyrics from Spotify",
   "dependencies": {
     "express": "^4.21.2",

@@ -11,6 +11,28 @@ const StreamZip = require("node-stream-zip");
 const REPO = "bkiaf/Lyrics-Status-af";
 const ROOT_DIR = path.join(__dirname, "..");
 
+const OBSOLETE_ITEMS = [
+    "run.bat",
+    "install.bat",
+    "src",
+    "tools",
+    "tsconfig.json",
+    "tsconfig.tsbuildinfo",
+    "README.md",
+    "README(1).md",
+    "README(2).md",
+    "_update.zip",
+    "_update_tmp"
+];
+
+const PRESERVE_NAMES = new Set([
+    "settings.json",
+    "node_modules",
+    ".af-node",
+    ".af-npm-cache",
+    "_pending_launcher"
+]);
+
 function readCurrentVersion() {
     try {
         return fs.readFileSync(path.join(ROOT_DIR, "VERSION"), "utf-8").trim();
@@ -21,7 +43,7 @@ function readCurrentVersion() {
 
 function fetchJSON(url) {
     return new Promise((resolve, reject) => {
-        const opts = { headers: { "User-Agent": "Lyrics-Status-Updater/1.0" } };
+        const opts = { headers: { "User-Agent": "Lyrics-Status-Updater/1.2" } };
         const mod = url.startsWith("https") ? https : http;
         const req = mod.get(url, opts, (res) => {
             if (res.statusCode === 301 || res.statusCode === 302) {
@@ -41,7 +63,7 @@ function fetchJSON(url) {
 
 function downloadFile(url, dest) {
     return new Promise((resolve, reject) => {
-        const opts = { headers: { "User-Agent": "Lyrics-Status-Updater/1.0" } };
+        const opts = { headers: { "User-Agent": "Lyrics-Status-Updater/1.2" } };
         const mod = url.startsWith("https") ? https : http;
         const req = mod.get(url, opts, (res) => {
             if (res.statusCode === 301 || res.statusCode === 302) {
@@ -61,13 +83,134 @@ function downloadFile(url, dest) {
 }
 
 function versionGt(a, b) {
-    // Returns true if a > b (semver-ish, strips leading v)
-    const parse = v => v.replace(/^v/, "").split(".").map(x => parseInt(x) || 0);
-    const [a1, a2, a3] = parse(a);
-    const [b1, b2, b3] = parse(b);
-    if (a1 !== b1) return a1 > b1;
-    if (a2 !== b2) return a2 > b2;
-    return a3 > b3;
+    // Returns true if a > b. Supports versions like 7.0.4.1, not only 3-part semver.
+    const parse = v => String(v || "")
+        .trim()
+        .replace(/^v/i, "")
+        .split(/[.\-+]/)
+        .map(x => {
+            const m = String(x).match(/\d+/);
+            return m ? parseInt(m[0], 10) : 0;
+        });
+    const aa = parse(a);
+    const bb = parse(b);
+    const len = Math.max(aa.length, bb.length);
+    for (let i = 0; i < len; i++) {
+        const av = aa[i] || 0;
+        const bv = bb[i] || 0;
+        if (av !== bv) return av > bv;
+    }
+    return false;
+}
+
+function cleanupObsoleteFiles() {
+    for (const item of OBSOLETE_ITEMS) {
+        try { fs.rmSync(path.join(ROOT_DIR, item), { recursive: true, force: true }); } catch(e) {}
+    }
+}
+
+function copyFileSafe(src, dst) {
+    fs.mkdirSync(path.dirname(dst), { recursive: true });
+    fs.copyFileSync(src, dst);
+}
+
+function copyUpdateTree(srcRoot, dstRoot) {
+    const pendingLauncherDir = path.join(dstRoot, "_pending_launcher");
+    try { fs.rmSync(pendingLauncherDir, { recursive: true, force: true }); } catch(e) {}
+
+    const walk = (src, rel = "") => {
+        const base = path.basename(src);
+        const dst = path.join(dstRoot, rel);
+
+        if (rel && PRESERVE_NAMES.has(rel)) return;
+        if (base === "settings.json") return;
+        if (base === ".af-node" || base === ".af-npm-cache" || base === "node_modules") return;
+
+        // Windows locks the running launcher exe. Stage it for the launcher to apply after exit.
+        if (base.toLowerCase() === "lyrics status.exe") {
+            fs.mkdirSync(pendingLauncherDir, { recursive: true });
+            copyFileSafe(src, path.join(pendingLauncherDir, "Lyrics Status.exe"));
+            return;
+        }
+
+        const stat = fs.statSync(src);
+        if (stat.isDirectory()) {
+            fs.mkdirSync(dst, { recursive: true });
+            for (const child of fs.readdirSync(src)) {
+                walk(path.join(src, child), rel ? path.join(rel, child) : child);
+            }
+            return;
+        }
+        copyFileSafe(src, dst);
+    };
+
+    for (const child of fs.readdirSync(srcRoot)) {
+        walk(path.join(srcRoot, child), child);
+    }
+}
+
+function findAppRoot(dir) {
+    const direct = path.join(dir, "package.json");
+    if (fs.existsSync(direct) && fs.existsSync(path.join(dir, "dist")) && fs.existsSync(path.join(dir, "static"))) {
+        return dir;
+    }
+    const stack = [dir];
+    while (stack.length) {
+        const current = stack.shift();
+        let items = [];
+        try { items = fs.readdirSync(current, { withFileTypes: true }); } catch(e) { continue; }
+        if (fs.existsSync(path.join(current, "package.json")) && fs.existsSync(path.join(current, "dist")) && fs.existsSync(path.join(current, "static"))) {
+            return current;
+        }
+        for (const item of items) {
+            if (item.isDirectory() && !item.name.startsWith(".")) {
+                stack.push(path.join(current, item.name));
+            }
+        }
+    }
+    return dir;
+}
+
+function copyUpdateFiles(src, dest, onProgress) {
+    const preserved = new Map();
+    for (const name of ["settings.json"]) {
+        const p = path.join(dest, name);
+        if (fs.existsSync(p)) preserved.set(name, fs.readFileSync(p));
+    }
+
+    const pendingLauncherDir = path.join(dest, "_pending_launcher");
+
+    function copyRecursive(from, to) {
+        const st = fs.statSync(from);
+        const base = path.basename(from);
+
+        if (base === "node_modules" || base === ".af-node" || base === ".git" || base === "settings.json") {
+            return;
+        }
+
+        if (st.isDirectory()) {
+            fs.mkdirSync(to, { recursive: true });
+            for (const item of fs.readdirSync(from)) {
+                copyRecursive(path.join(from, item), path.join(to, item));
+            }
+            return;
+        }
+
+        if (base.toLowerCase() === "lyrics status.exe") {
+            fs.mkdirSync(pendingLauncherDir, { recursive: true });
+            fs.copyFileSync(from, path.join(pendingLauncherDir, "Lyrics Status.exe"));
+            return;
+        }
+
+        fs.mkdirSync(path.dirname(to), { recursive: true });
+        fs.copyFileSync(from, to);
+    }
+
+    copyRecursive(src, dest);
+
+    for (const [name, content] of preserved) {
+        fs.writeFileSync(path.join(dest, name), content);
+    }
 }
 
 class Updater {
@@ -104,13 +247,18 @@ class Updater {
     static async doUpdate(downloadUrl, onProgress) {
         const tmpZip = path.join(ROOT_DIR, "_update.zip");
         const tmpDir = path.join(ROOT_DIR, "_update_tmp");
+        const settingsPath = path.join(ROOT_DIR, "settings.json");
+        let settingsBackup = null;
+
+        try {
+            if (fs.existsSync(settingsPath)) settingsBackup = fs.readFileSync(settingsPath);
+        } catch(e) {}
 
         onProgress("Downloading update...");
         await downloadFile(downloadUrl, tmpZip);
 
         onProgress("Extracting files...");
 
-        // Clean up temp dir
         if (fs.existsSync(tmpDir)) fs.rmSync(tmpDir, { recursive: true, force: true });
         fs.mkdirSync(tmpDir);
 
@@ -128,20 +276,23 @@ class Updater {
 
         onProgress("Installing...");
 
-        // Find the extracted top-level folder
         const items = fs.readdirSync(tmpDir);
         let srcDir = tmpDir;
         if (items.length === 1) {
             const candidate = path.join(tmpDir, items[0]);
-            if (fs.statSync(candidate).isDirectory()) {
-                srcDir = candidate;
-            }
+            if (fs.statSync(candidate).isDirectory()) srcDir = candidate;
         }
+        srcDir = findAppRoot(srcDir);
 
-        // Copy everything to the root dir (overwrite existing files)
-        fs.cpSync(srcDir, ROOT_DIR, { recursive: true, force: true });
+        cleanupObsoleteFiles();
+        copyUpdateTree(srcDir, ROOT_DIR);
+        cleanupObsoleteFiles();
 
-        // Cleanup temp files
+        // Keep user tokens / auth settings untouched even if an update ZIP accidentally includes defaults.
+        try {
+            if (settingsBackup) fs.writeFileSync(settingsPath, settingsBackup);
+        } catch(e) {}
+
         try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch(e) {}
         try { fs.unlinkSync(tmpZip); } catch(e) {}
 

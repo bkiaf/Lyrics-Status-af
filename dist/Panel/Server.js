@@ -18,6 +18,19 @@ function startServer(playbackState, statusChanger) {
     const wss = new ws_1.WebSocketServer({ server: httpServer, path: "/ws" });
 
     app.use(express_1.default.json());
+
+    app.post("/api/refresh-dashboard", (req, res) => {
+        let refreshed = 0;
+        const payload = JSON.stringify({ type: "force_reload" });
+        wss.clients.forEach(client => {
+            if (client.readyState === 1) {
+                refreshed++;
+                client.send(payload);
+            }
+        });
+        res.json({ refreshed });
+    });
+
     app.use("/", express_1.default.static((0, node_path_1.join)(__dirname, "../../static")));
 
     app.get("/", (req, res) => {
