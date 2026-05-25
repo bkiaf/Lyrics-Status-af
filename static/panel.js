@@ -135,7 +135,7 @@ $(`
     <div class="brand">
       <span class="brand-icon"><span class="af-logo">AF</span></span>
       <span class="brand-name">Lyrics Status</span>
-      <span id="version-badge" class="version-badge">7.0.4.1</span>
+      <span id="version-badge" class="version-badge">7.0.5</span>
     </div>
     <nav class="nav">
       <div class="nav-indicator"></div>
@@ -572,7 +572,7 @@ $(`
 
 
 
-// ── v7.0.4 HOVER NO-CLIP FIX ───────────────────────────────────────────────
+// ── v7.0.5 HOVER NO-CLIP FIX ───────────────────────────────────────────────
 // Gives lifted/scaled controls breathing room so hover animations do not get
 // clipped by glass cards or tight rows. Keeps button shine clipped inside the
 // button itself.
@@ -1759,7 +1759,7 @@ function connectWS() {
 connectWS();
 
 
-// ── v7.0.4 RAPID-SMOOTH TAB MOTION PATCH ────────────────────────────────────
+// ── v7.0.5 RAPID-SMOOTH TAB MOTION PATCH ────────────────────────────────────
 // Keeps the luxe look, but makes fast menu switching continue from the current
 // frame instead of restarting from a fixed start point.
 
@@ -2039,7 +2039,7 @@ connectWS();
 })();
 
 
-// ── v7.0.4 EXTRA MOTION + AF HOVER SMOOTH PATCH ─────────────────────────────
+// ── v7.0.5 EXTRA MOTION + AF HOVER SMOOTH PATCH ─────────────────────────────
 // Adds richer transform/opacity-only motion and smooth AF logo hover movement.
 
 (function afHoverMotionV703() {
@@ -2085,7 +2085,7 @@ connectWS();
     });
 })();
 
-// ── v7.0.4 AF LOGO SMOOTH SCALE ENTER/LEAVE PATCH ─────────────────────────
+// ── v7.0.5 AF LOGO SMOOTH SCALE ENTER/LEAVE PATCH ─────────────────────────
 // Keeps the AF logo visual style, but makes mouse enter/leave scale smoothly
 // without keyframe snapping on hover-out.
 
@@ -2110,35 +2110,35 @@ connectWS();
 
 
 
-// ── v7.0.4 FINAL CONTROL EDGE / NO-CUT FIX ────────────────────────────────
+// ── v7.0.5 FINAL CONTROL EDGE / NO-CUT FIX ────────────────────────────────
 // Fixes controls that looked eaten/cropped even before hover by removing paint
 // containment and negative breathing-space margins from the previous hover fix.
 
 
-// ── v7.0.4 CLEAN OUTLINE / REMOVE SETTINGS BOX PATCH ─────────────────────
+// ── v7.0.5 CLEAN OUTLINE / REMOVE SETTINGS BOX PATCH ─────────────────────
 // Removes the heavy square fill around setting groups while keeping the clean border.
 // Keeps the controls, hover motion, and glass/luxe feel without the boxy rectangle.
-// ── v7.0.4 GLOBAL RANDOM REFLECTION BUG FIX ──────────────────────────────
+// ── v7.0.5 GLOBAL RANDOM REFLECTION BUG FIX ──────────────────────────────
 // Bug-only fix: the random reflection was caused by global decorative overlay
 // layers being blended/repainted through the glass UI in the embedded WebView.
 // This keeps the UI, cards, themes, blur, and animations as-is; it only removes
 // the unstable overlay layers that were showing up randomly across all tabs.
 
-// ── v7.0.4 GLOBAL AUTH-STYLE UI UNIFICATION PATCH ─────────────────────────
+// ── v7.0.5 GLOBAL AUTH-STYLE UI UNIFICATION PATCH ─────────────────────────
 // Make the whole app follow the same clean style seen in the Authentication
 // page: rounded section cards, soft dark gradients, subtle borders, and tidy
 // inputs/buttons without changing app logic.
 
-// ── v7.0.4 MORE TRANSPARENT UI + GLASS SIDEBAR PATCH ─────────────────────
+// ── v7.0.5 MORE TRANSPARENT UI + GLASS SIDEBAR PATCH ─────────────────────
 
-// ── v7.0.4 SIDEBAR / CONTENT GAP FIX ──────────────────────────────────────
+// ── v7.0.5 SIDEBAR / CONTENT GAP FIX ──────────────────────────────────────
 
-// ── v7.0.4 SIDEBAR GAP FIX V2 (LEFT-ALIGNED CONTENT) ──────────────────────
+// ── v7.0.5 SIDEBAR GAP FIX V2 (LEFT-ALIGNED CONTENT) ──────────────────────
 
-// ── v7.0.4 HARD LEFT ALIGN PATCH ──────────────────────────────────────────
+// ── v7.0.5 HARD LEFT ALIGN PATCH ──────────────────────────────────────────
 // Force the content panel to start immediately after the fixed sidebar.
 
-// ── v7.0.4 TAB SWITCH BLANK GUARD PATCH ───────────────────────────────────
+// ── v7.0.5 TAB SWITCH BLANK GUARD PATCH ───────────────────────────────────
 // Keeps the tight sidebar layout, but prevents tab panels from ending hidden
 // after a menu switch.
 
@@ -2240,7 +2240,7 @@ connectWS();
     });
 })();
 
-// ── v7.0.4 MENU CONTENT VISIBLE GRID FIX ──────────────────────────────────
+// ── v7.0.5 MENU CONTENT VISIBLE GRID FIX ──────────────────────────────────
 // The hard left-align patch made .content display:block, so hidden tab panels
 // stayed in normal document flow and pushed the newly selected panel down.
 // Keep the tight sidebar spacing, but restore the overlapping grid stack.
@@ -2297,7 +2297,7 @@ connectWS();
     });
 })();
 
-// ── v7.0.4 SILKY UPDATE STAGES MOTION PATCH ───────────────────────────────
+// ── v7.0.5 SILKY UPDATE STAGES MOTION PATCH ───────────────────────────────
 // Adds smoother enter/exit/morph classes for Check / Install / Restart.
 (function silkyUpdateStagesMotion703() {
   if (typeof setUpdateFlow !== "function" || typeof hideUpdateFlowSmooth !== "function") return;

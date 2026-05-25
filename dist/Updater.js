@@ -83,7 +83,7 @@ function downloadFile(url, dest) {
 }
 
 function versionGt(a, b) {
-    // Returns true if a > b. Supports versions like 7.0.4.1, not only 3-part semver.
+    // Returns true if a > b. Supports versions like 7.0.5, not only 3-part semver.
     const parse = v => String(v || "")
         .trim()
         .replace(/^v/i, "")
