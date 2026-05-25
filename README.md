@@ -2,12 +2,19 @@
 
 Automatically updates your Discord custom status with real-time Spotify lyrics.
 
-Lyrics Status runs locally on your PC and opens a web control panel at:
+Lyrics Status runs locally on your PC and opens a web control panel
 
-```text
-http://localhost:8999
-```
+---
 
+## Features
+
+- Real-time Discord custom status updates.
+- Spotify playback detection.
+- Synced lyrics from multiple sources.
+- Local web control panel.
+- Timing and offset controls.
+- Built-in updater.
+- 
 ---
 
 ## Download
@@ -22,7 +29,6 @@ After extracting, open the folder and run:
 ```text
 Lyrics Status.exe
 ```
-
 
 ---
 
@@ -91,18 +97,6 @@ http://localhost/callback
 6. Click **Authorize Spotify**.
 
 After authorization, play a song on Spotify. If synced lyrics are available, they will appear in your Discord custom status.
-
----
-
-## Features
-
-- Real-time Discord custom status updates.
-- Spotify playback detection.
-- Synced lyrics from multiple sources.
-- Local web control panel.
-- Timing and offset controls.
-- Built-in updater.
-- Windows EXE launcher with automatic dependency setup.
 
 ---
 
