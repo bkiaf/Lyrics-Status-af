@@ -3,7 +3,7 @@
 > Automatically updates your Discord custom status with real-time song lyrics from Spotify.
 
 Lyrics Status is a local Node.js app with a web control panel. It listens to your current Spotify playback, finds synced lyrics from supported sources, and updates your Discord custom status line by line.
-
+ 
 ---
 
 ## Screenshots
