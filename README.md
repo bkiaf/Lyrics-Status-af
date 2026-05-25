@@ -1,106 +1,87 @@
 # AF — Lyrics Status
 
-> Automatically updates your Discord custom status with real-time song lyrics from Spotify.
+Automatically updates your Discord custom status with real-time Spotify lyrics.
 
-Lyrics Status is a local Node.js app with a web control panel. It listens to your current Spotify playback, finds synced lyrics from supported sources, and updates your Discord custom status line by line.
- 
----
-
-## Screenshots
-
-### Auth Tab
-![Auth Tab](assets/screenshots/auth-tab.png)
-
-### Display Settings
-![Display Settings](assets/screenshots/display-settings.png)
-
-### Timing
-![Timing Settings](assets/screenshots/Timing.png)
-
-### Theme Tab
-![Theme Tab](assets/screenshots/theme-tab.png)
-
-### Updater
-![Updater](assets/screenshots/updater.png)
-
----
-
-## Features
-
-- Real-time Discord custom status updates
-- Synced lyrics support from multiple sources
-- Local web control panel
-- Timing and offset controls
-- Windows launchers for install and run
-
----
-
-## Requirements
-
-| Requirement | Version |
-|---|---|
-| [Node.js](https://nodejs.org/en) | v17 or higher |
-| Windows | 10 / 11 for `.bat` launchers |
-| Spotify account | Free or Premium |
-| Discord account | Required |
-
----
-
-## Installation
-
-### 1. Download
-
-Download the project ZIP and extract it anywhere on your computer.
-
-### 2. Install dependencies
-
-Double-click:
-
-```bat
-install.bat
-```
-
-Or install manually from a terminal:
-
-```bash
-npm install
-```
-
-> If you get a permissions error, right-click `install.bat` and choose **Run as administrator**.
-
----
-
-## Running
-
-Double-click:
-
-```bat
-run.bat
-```
-
-Or run manually:
-
-```bash
-npm run start
-```
-
-Then open:
+Lyrics Status runs locally on your PC and opens a web control panel at:
 
 ```text
 http://localhost:8999
 ```
 
-Press **Ctrl+C** in the terminal to stop the app.
+---
+
+## Download
+
+Download the latest release from GitHub Releases, then extract the ZIP anywhere you want.
+
+Use this file from the release assets:
+
+```text
+lyrics-status-v7.0.4.1-exe-update-fix.zip
+```
+
+After extracting, open the folder and run:
+
+```text
+Lyrics Status.exe
+```
+
+That is all. You do not need to run `install.bat`, `run.bat`, or install dependencies manually.
 
 ---
 
-## Setup Guide
+## What the EXE Does
 
-Once the panel is open, complete the setup from the **Auth** tab.
+`Lyrics Status.exe` replaces the old batch files.
+
+When you run it, it automatically:
+
+- Checks the project files.
+- Downloads a portable Node.js copy into `.af-node/` if needed.
+- Installs missing dependencies with npm.
+- Starts Lyrics Status locally.
+- Opens or refreshes the control panel.
+- Keeps the launcher window title stable.
+- Handles app restarts after updates.
+
+Generated local folders such as `.af-node/` and `node_modules/` are not included in the download because the launcher creates them when needed.
+
+---
+
+## Updating
+
+Open the **Updates** tab inside the panel.
+
+If a newer version is available, the app downloads the release ZIP, installs it, cleans old files, and restarts.
+
+Your local settings are kept, including:
+
+```text
+settings.json
+```
+
+This means your Discord token, Spotify settings, and saved preferences stay on the user's device during updates.
+
+For releases to update correctly, upload the ready ZIP as a release asset. The ZIP should contain the app folder directly, like this:
+
+```text
+lyrics-status-v7.0.4.1/
+  Lyrics Status.exe
+  package.json
+  VERSION
+  dist/
+  static/
+```
+
+Do not put the app folder inside another extra wrapper folder.
+
+---
+
+## Setup
+
+After launching the app, complete setup from the **Auth** tab.
 
 ### Discord Token
-
-You need your Discord user token so the tool can update your custom status.
 
 1. Open Discord in your browser.
 2. Press `F12` to open DevTools.
@@ -108,148 +89,76 @@ You need your Discord user token so the tool can update your custom status.
 4. Reload Discord or send any message.
 5. Look for a request to `discord.com/api`.
 6. Open the request and check **Request Headers**.
-7. Copy the value from the `Authorization` header.
+7. Copy the `Authorization` value.
 8. Paste it into **Auth → User token** and click **Check**.
 
-> ⚠️ Never share your Discord token with anyone. It gives access to your account.
+Never share your Discord token with anyone.
 
 ### Spotify App
 
-1. Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
-2. Log in and click **Create app**.
-3. Fill in any name and description.
-4. Add this Redirect URI:
+1. Go to the Spotify Developer Dashboard.
+2. Create an app.
+3. Add this Redirect URI:
 
 ```text
 http://localhost/callback
 ```
 
-5. Save the app.
-6. Copy your **Client ID** and **Client Secret** into the panel.
-7. Paste the same Redirect URI into the panel.
-8. Click **Authorize Spotify**.
+4. Copy the Client ID and Client Secret into the panel.
+5. Paste the same Redirect URI into the panel.
+6. Click **Authorize Spotify**.
 
-After authorization, play a song on Spotify. If synced lyrics are available, they will start appearing in your Discord custom status.
-
----
-
-## Connection Status
-
-The status indicator in the panel shows what the app is currently doing.
-
-| State | Meaning |
-|---|---|
-| Disconnected | The server is not running or the panel cannot reach it |
-| Incomplete | Discord or Spotify setup is missing |
-| Not playing | Spotify is connected, but nothing is currently playing |
-| Buffering | A song is playing, but lyrics are still syncing |
-| Live | Everything is working and lyrics are updating |
+After authorization, play a song on Spotify. If synced lyrics are available, they will appear in your Discord custom status.
 
 ---
 
-## Display Settings
+## Features
 
-In the **Display** tab, you can customize what appears in your Discord status.
-
-Available template placeholders:
-
-| Placeholder | Description |
-|---|---|
-| `{lyrics}` | Current lyrics line |
-| `{song_name}` | Song title |
-| `{song_author}` | Artist name |
-| `{timestamp}` | Current playback position |
-| `{lyrics_upper}` | Lyrics in uppercase |
-| `{lyrics_lower}` | Lyrics in lowercase |
-| `{lyrics_letters_only}` | Lyrics with symbols removed |
-
----
-
-## Timing Settings
-
-In the **Timing** tab, you can adjust how lyrics sync with the song.
-
-- **Auto-offset** automatically adjusts for Discord API delay.
-- **Manual offset** lets you control the timing manually.
-- **Auto-offset samples** controls how many recent requests are used for delay averaging.
-
----
-
-## Themes
-
-In the **Theme** tab, you can choose a built-in theme or create your own custom colors.
-
-Built-in presets include:
-
-- Purple
-- Ocean
-- Sunset
-- Forest
-- custom
-
----
-
-## Updates
-
-The **Updates** tab can check GitHub for new releases and install updates when available.
-
-For updates to work correctly, the release ZIP should contain the project folder directly:
-
-```text
-lyrics-status-v7/
-  package.json
-  VERSION
-  static/
-  dist/
-  run.bat
-  install.bat
-```
-
-Avoid wrapping the project folder inside an extra folder.
+- Real-time Discord custom status updates.
+- Spotify playback detection.
+- Synced lyrics from multiple sources.
+- Local web control panel.
+- Timing and offset controls.
+- Built-in updater.
+- Windows EXE launcher with automatic dependency setup.
 
 ---
 
 ## Troubleshooting
 
-### Status stays on Not playing
+### The panel does not open
 
-Make sure Spotify is open and a song is actively playing.
+Run `Lyrics Status.exe` again and keep the launcher window open. The panel uses:
 
-### Discord token is missing or invalid
+```text
+http://localhost:8999
+```
 
-Re-paste your Discord token in the **Auth** tab and click **Check**.
+### Dependencies are missing
+
+The launcher installs them automatically. If it fails, delete `node_modules/` and run `Lyrics Status.exe` again.
+
+### Node.js errors appear
+
+Delete `.af-node/` and run `Lyrics Status.exe` again. It will download a fresh portable Node.js copy.
 
 ### Spotify is not connected
 
-Click **Authorize Spotify** again and complete the login flow.
+Open the **Auth** tab and authorize Spotify again.
 
-### Panel does not open
+### Discord status is not updating
 
-Make sure Node.js is installed:
-
-```bash
-node --version
-```
-
-Also make sure nothing else is using port `8999`.
-
-### Lyrics are off-sync
-
-Enable **Auto-offset** in the **Timing** tab. If needed, adjust the manual offset.
-
-### No lyrics found
-
-Some songs do not have synced lyrics available. The app will try supported lyric sources automatically.
+Re-check your Discord token in the **Auth** tab.
 
 ---
 
 ## Tech Stack
 
-- **TypeScript**
-- **Node.js**
-- **Express**
-- **WebSocket**
-- **jQuery**
+- Node.js
+- Express
+- WebSocket
+- jQuery
+- Windows EXE launcher
 
 ---
 
@@ -257,10 +166,10 @@ Some songs do not have synced lyrics available. The app will try supported lyric
 
 The original concept and core idea is based on [OvalQuilter/lyrics-status](https://github.com/OvalQuilter/lyrics-status).
 
-This fork adds its own fixes, UI work, launcher styling, and control panel improvements.
+This fork includes its own UI, updater, launcher, and setup improvements.
 
 ---
 
 ## Disclaimer
 
-Use this tool at your own risk. Automating Discord actions using a user token may violate Discord's Terms of Service.
+Use this tool at your own risk. Automating Discord actions with a user token may violate Discord's Terms of Service.
