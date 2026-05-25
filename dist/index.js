@@ -22,14 +22,14 @@ const AF_CONSOLE_RESET = "\x1b[0m";
 
 // ─── AUTO-UPDATE CHECK ────────────────────────────────────────────────────────
 async function checkAutoUpdate() {
-    if (!Settings_1.Settings.update || !Settings_1.Settings.update.enableAutoupdate) return;
+    if (!Settings_1.Settings.update || !Settings_1.Settings.update.enableAutoupdate) return false;
 
     console.log("\n  [Update] Auto-update enabled — checking for updates...\n");
     try {
         const result = await Updater_1.Updater.checkForUpdate();
         if (!result.hasUpdate) {
             console.log("  [Update] Already up to date (" + result.current + ")\n");
-            return;
+            return false;
         }
 
         console.log("  [Update] New version available: " + result.latest + " (current: " + result.current + ")\n");
@@ -40,14 +40,18 @@ async function checkAutoUpdate() {
         });
 
         console.log("\n  [Update] ✓ Update applied! Restarting...\n");
-        // Exit code 2 = update applied → run.bat will restart
-        setTimeout(() => process.exit(2), 1000);
+        // Exit code 2 = update applied → the EXE launcher will clean/rename/restart.
+        process.exit(2);
+        return true;
     } catch(e) {
         console.log("  [Update] Check failed: " + e.message + " (continuing with current version)\n");
+        return false;
     }
 }
 
-checkAutoUpdate().then(() => init());
+checkAutoUpdate().then((updated) => {
+    if (!updated) init();
+});
 
 function init() {
     if (!Settings_1.Settings.credentials.uuid) {

@@ -135,7 +135,7 @@ $(`
     <div class="brand">
       <span class="brand-icon"><span class="af-logo">AF</span></span>
       <span class="brand-name">Lyrics Status</span>
-      <span id="version-badge" class="version-badge">7.0.4</span>
+      <span id="version-badge" class="version-badge">7.0.4.1</span>
     </div>
     <nav class="nav">
       <div class="nav-indicator"></div>
@@ -1236,7 +1236,9 @@ btnCheckUpdate.click(async () => {
         updCurrent.text(data.current || "?");
         updLatest.text(data.latest || "?").removeClass("has-update");
 
-        if (data.hasUpdate) {
+        const hasUpdate = !!data.hasUpdate || versionIsGreater(data.latest, data.current);
+
+        if (hasUpdate) {
             updLatest.addClass("has-update");
             _pendingDownloadUrl = data.downloadUrl;
             btnDoUpdate.removeClass("hid");
@@ -1314,6 +1316,24 @@ let _whatsNewAutoTimer = null;
 
 function normalizeReleaseVersion(version) {
     return String(version || "").trim().replace(/^v/i, "");
+}
+
+function versionIsGreater(a, b) {
+    const parse = (v) => normalizeReleaseVersion(v)
+        .split(/[.\-+]/)
+        .map(part => {
+            const m = String(part).match(/\d+/);
+            return m ? parseInt(m[0], 10) : 0;
+        });
+    const aa = parse(a);
+    const bb = parse(b);
+    const len = Math.max(aa.length, bb.length);
+    for (let i = 0; i < len; i++) {
+        const av = aa[i] || 0;
+        const bv = bb[i] || 0;
+        if (av !== bv) return av > bv;
+    }
+    return false;
 }
 
 function escapeHTML(value) {
@@ -1519,7 +1539,8 @@ async function loadWhatsNewFromGitHub(force) {
         updCurrent.text(data.current || updCurrent.text() || "?");
         updLatest.text(data.latest || updLatest.text() || "?");
 
-        if (!force && data.hasUpdate) {
+        const hasUpdate = !!data.hasUpdate || versionIsGreater(data.latest, data.current);
+        if (!force && hasUpdate) {
             return;
         }
 
@@ -1696,6 +1717,8 @@ function connectWS() {
             if (data.type === "playback") {
                 window._playback = data;
                 updateConnectionStatus();
+            } else if (data.type === "force_reload") {
+                setTimeout(() => window.location.reload(), 120);
             } else if (data.type === "update_progress") {
                 setUpdateFlow("download", data.message || "Installing update...");
                 setUpdStatus(data.message, "info", true);
