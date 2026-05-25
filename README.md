@@ -16,9 +16,6 @@ Download the latest release from GitHub Releases, then extract the ZIP anywhere 
 
 Use this file from the release assets:
 
-```text
-lyrics-status-v7.0.4.1-exe-update-fix.zip
-```
 
 After extracting, open the folder and run:
 
@@ -26,13 +23,12 @@ After extracting, open the folder and run:
 Lyrics Status.exe
 ```
 
-That is all. You do not need to run `install.bat`, `run.bat`, or install dependencies manually.
 
 ---
 
 ## What the EXE Does
 
-`Lyrics Status.exe` replaces the old batch files.
+`Lyrics Status.exe`
 
 When you run it, it automatically:
 
@@ -41,7 +37,6 @@ When you run it, it automatically:
 - Installs missing dependencies with npm.
 - Starts Lyrics Status locally.
 - Opens or refreshes the control panel.
-- Keeps the launcher window title stable.
 - Handles app restarts after updates.
 
 Generated local folders such as `.af-node/` and `node_modules/` are not included in the download because the launcher creates them when needed.
@@ -61,19 +56,6 @@ settings.json
 ```
 
 This means your Discord token, Spotify settings, and saved preferences stay on the user's device during updates.
-
-For releases to update correctly, upload the ready ZIP as a release asset. The ZIP should contain the app folder directly, like this:
-
-```text
-lyrics-status-v7.0.4.1/
-  Lyrics Status.exe
-  package.json
-  VERSION
-  dist/
-  static/
-```
-
-Do not put the app folder inside another extra wrapper folder.
 
 ---
 
@@ -149,16 +131,6 @@ Open the **Auth** tab and authorize Spotify again.
 ### Discord status is not updating
 
 Re-check your Discord token in the **Auth** tab.
-
----
-
-## Tech Stack
-
-- Node.js
-- Express
-- WebSocket
-- jQuery
-- Windows EXE launcher
 
 ---
 
