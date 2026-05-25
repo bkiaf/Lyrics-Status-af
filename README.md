@@ -1,8 +1,10 @@
 # AF — Lyrics Status
 
-Automatically updates your Discord custom status with real-time Spotify lyrics.
+🎵 Automatically updates your Discord custom status with real-time Spotify lyrics.
 
-Lyrics Status runs locally on your PC and opens a web control panel
+**Quick Start**: Download, extract, run `Lyrics Status.exe`. That's it.
+
+Lyrics Status runs locally on your PC...
 
 ---
 
