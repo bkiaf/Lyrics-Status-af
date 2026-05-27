@@ -1,4 +1,4 @@
-# Lyrics Status v7.0.4.12
+# Lyrics Status AF
 
 🎵 Automatically update your Discord custom status with real-time, synchronized Spotify lyrics.
 
